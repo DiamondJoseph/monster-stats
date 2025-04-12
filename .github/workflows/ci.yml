@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  deduplicate:
+    uses: ./.github/workflows/_deduplicate.yml
+
+  lint:
+    needs: deduplicate
+    if: needs.deduplicate.outputs.pr == ''
+    uses: ./.github/workflows/_lint.yml
+
+  test:
+    needs: deduplicate
+    if: needs.deduplicate.outputs.pr == ''
+    uses: ./.github/workflows/_test.yml

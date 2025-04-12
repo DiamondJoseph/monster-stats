@@ -1,0 +1,35 @@
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4.2.2
+
+    - name: Install stable toolchain
+      uses: actions-rs/toolchain@v1.0.7
+      with:
+        toolchain: stable
+        default: true
+
+    - name: Cache Rust Build
+      uses: Swatinem/rust-cache@v2.7.7
+
+    - name: Check Formatting
+      uses: actions-rs/cargo@v1.0.3
+      with:
+        command: fmt
+        args: --check
+
+    - name: Lint with Clippy
+      uses: actions-rs/cargo@v1.0.3
+      with:
+        command: clippy
+        args: >
+          --no-deps
+          --all-targets
+          --all-features
+          --
+          --deny warnings
