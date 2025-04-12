@@ -17,9 +17,6 @@ async fn main() {
                 println!("{}: {}", stat.stat.name, stat.base_stat);
             }
         }
-        Err(_) => println!("Not a valid species name")
+        Err(_) => println!("Not a valid species name"),
     }
-    
-    
-    
 }
