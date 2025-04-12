@@ -22,5 +22,6 @@ jobs:
       with:
         command: test
         args: >
+          --manifest-path rust/Cargo.toml
           --all-targets
           --all-features
