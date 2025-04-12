@@ -17,3 +17,11 @@ jobs:
     needs: deduplicate
     if: needs.deduplicate.outputs.pr == ''
     uses: ./.github/workflows/_test.yml
+
+  container:
+    needs: 
+    - deduplicate
+    - lint
+    - test
+    if: needs.deduplicate.outputs.pr == ''
+    uses: ./.github/workflows/_container.yml
