@@ -10,10 +10,16 @@ async fn main() {
         .expect("Failed to read line");
 
     let rustemon_client = rustemon::client::RustemonClient::default();
-    let pokemon = rustemon::pokemon::pokemon::get_by_name(&species, &rustemon_client).await;
-    println!("{}", pokemon.as_ref().unwrap().name);
-    for stat in pokemon.unwrap().stats.into_iter() {
-        println!("{}: {}", stat.stat.name, stat.base_stat);
+    let species_stats = rustemon::pokemon::pokemon::get_by_name(&species, &rustemon_client).await;
+    match species_stats {
+        Ok(species) => {
+            for stat in species.stats.into_iter() {
+                println!("{}: {}", stat.stat.name, stat.base_stat);
+            }
+        }
+        Err(_) => println!("Not a valid species name")
     }
+    
+    
     
 }
