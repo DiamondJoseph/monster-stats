@@ -1,9 +1,26 @@
 on:
-  workflow_call:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  release-please:
+    outputs:
+      releases_created: ${{ steps.release-please.outputs.releases_created }}
     runs-on: ubuntu-latest
+    steps:
+    - uses: google-github-actions/release-please-action@v4
+      name: release-please
+      with:
+        release-type: rust
+        path: rust
+    permissions:
+      contents: write
+      pull-requests: write
+
+  release-rust-container:
+    runs-on: ubuntu-latest
+    if: ${{ jobs.release-please.outputs.releases_created }}
 
     steps:
     - name: Checkout
@@ -30,8 +47,10 @@ jobs:
       with:
         images: ghcr.io/${{ github.repository }}
         tags: |
-          type=semver,pattern={{version}}
           type=raw,value=latest
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
 
     - name: Build and push image to container registry
       if: github.ref_type == 'tag'

@@ -12,11 +12,3 @@ jobs:
 
   test:
     uses: ./.github/workflows/_test.yml
-
-  container:
-    needs: 
-    - lint
-    - test
-    uses: ./.github/workflows/_container.yml
-    permissions:
-      packages: write
