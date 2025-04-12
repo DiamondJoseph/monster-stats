@@ -21,13 +21,16 @@ jobs:
       uses: actions-rs/cargo@v1.0.3
       with:
         command: fmt
-        args: --check
+        args: >
+          --manifest-path rust/Cargo.toml
+          --check
 
     - name: Lint with Clippy
       uses: actions-rs/cargo@v1.0.3
       with:
         command: clippy
         args: >
+          --manifest-path rust/Cargo.toml
           --no-deps
           --all-targets
           --all-features
