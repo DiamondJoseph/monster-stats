@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release-please:
+    outputs:
+      releases_created: ${{ steps.release-please.outputs.releases_created }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: google-github-actions/release-please-action@v4
+      name: release-please
+      with:
+        release-type: helm
+        path: helm
+    permissions:
+      contents: write
+      pull-requests: write
+
+  release-helm-chart:
+    runs-on: ubuntu-latest
+    if: ${{ jobs.release-please.outputs.releases_created }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install Helm
+      uses: Azure/setup-helm@v3
+
+    - name: Login to chart registry
+      run: |
+        echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io/diamondjoseph/monster-stats --username ${{ github.repository_owner }} --password-stdin
+
+    - name: Package and publish chart
+      run: |
+        helm dependencies update helm
+        helm package helm -d /tmp/
+        helm push /tmp/helm*.tgz oci://ghcr.io/diamondjoseph/monster-stats
