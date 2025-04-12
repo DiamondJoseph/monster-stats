@@ -1,0 +1,11 @@
+{
+    "name": "Rust Development Environment",
+    "image": "mcr.microsoft.com/devcontainers/rust:latest",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "1yib.rust-bundle"
+            ]
+        }
+    }
+}
