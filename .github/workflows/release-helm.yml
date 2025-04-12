@@ -20,7 +20,8 @@ jobs:
 
   release-helm-chart:
     runs-on: ubuntu-latest
-    if: ${{ jobs.release-please.outputs.releases_created }}
+    needs: release-please
+    if: needs.release-please.outputs.releases_created
     steps:
     - name: Checkout
       uses: actions/checkout@v3
