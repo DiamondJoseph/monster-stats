@@ -25,3 +25,5 @@ jobs:
     - test
     if: needs.deduplicate.outputs.pr == ''
     uses: ./.github/workflows/_container.yml
+    permissions:
+      packages: write
