@@ -2,12 +2,12 @@ use std::io;
 
 #[tokio::main]
 async fn main() {
-    println!("Enter a Pokémon species name (or `exit`):");
     let exit = String::from("exit\n");
     let rustemon_client: rustemon::client::RustemonClient =
         rustemon::client::RustemonClient::default();
 
     loop {
+        println!("Enter a species name (or `exit`):");
         let mut input = String::new();
 
         io::stdin()
@@ -25,7 +25,11 @@ async fn main() {
                     println!("{}: {}", stat.stat.name, stat.base_stat);
                 }
             }
-            Err(_) => println!("Not a valid species name"),
+            Err(err) => println!(
+                "Unable to fetch {} ({}): is the species name correct?",
+                input, err
+            ),
         }
+        println!()
     }
 }
