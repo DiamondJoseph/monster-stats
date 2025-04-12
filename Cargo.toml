@@ -1,0 +1,10 @@
+[package]
+name = "monster-stats"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[[bin]]
+name = "monster-stats"
+path = "main.rs"
