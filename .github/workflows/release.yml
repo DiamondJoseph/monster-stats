@@ -20,7 +20,8 @@ jobs:
 
   release-rust-container:
     runs-on: ubuntu-latest
-    if: ${{ jobs.release-please.outputs.releases_created }}
+    needs: release-please
+    if: needs.release-please.outputs.releases_created
     permissions:
       packages: write
 
