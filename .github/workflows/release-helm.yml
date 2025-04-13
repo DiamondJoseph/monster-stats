@@ -15,6 +15,7 @@ jobs:
         release-type: helm
         path: helm
     permissions:
+      issues: write
       contents: write
       pull-requests: write
 
