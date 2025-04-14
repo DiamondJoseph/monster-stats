@@ -4,13 +4,25 @@
 version: 2
 updates:
   - package-ecosystem: "cargo"
-    directory: "/"
+    directory: "/rust"
     schedule:
       interval: "weekly"
     commit-message:
       prefix: "chore"
+
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directory: "/.github"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore"
+    groups:
+      all:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "helm"
+    directory: "/helm"
     schedule:
       interval: "weekly"
     commit-message:
