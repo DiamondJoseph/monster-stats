@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "include-v-in-tag": true,
+  "tag-separator": "@",
+  "separate-pull-requests": true,
+  "packages": {
+    "rust": {
+      "include-component-in-tag": false,
+      "component": "container",
+      "release-type": "rust"
+    },
+    "helm": {
+      "component": "chart",
+      "release-type": "helm"
+    }
+  }
+}
