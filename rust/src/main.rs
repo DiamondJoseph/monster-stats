@@ -27,11 +27,9 @@ async fn main() {
     let mut pokemon_box = HashMap::new();
 
     loop {
-        let mut function_input = String::new();
-        println!("Encounter, Withdraw or Exit?");
-        read_in(&mut function_input);
+        let function = read_in("Encounter, Withdraw or Exit?");
 
-        match function_input.trim().parse() {
+        match function.parse() {
             Ok(Funcs::Encounter) => encounter(&rustemon_client, &mut pokemon_box).await,
             Ok(Funcs::Withdraw) => withdraw(&pokemon_box),
             Ok(Funcs::Exit) => break,
@@ -41,20 +39,15 @@ async fn main() {
 }
 
 async fn encounter(client: &RustemonClient, pokemon_box: &mut HashMap<String, Pokemon>) {
-    let mut species_input = String::new();
-    println!("Enter a species name:");
-    read_in(&mut species_input);
+    let species_name = read_in("Enter a species name:");
 
-    let result = rustemon::pokemon::pokemon::get_by_name(&species_input, client).await;
+    let result = rustemon::pokemon::pokemon::get_by_name(&species_name, client).await;
     match result {
         Ok(species) => {
             print_species(&species);
+            let caught = read_in("Did you catch it? (Y/N):");
 
-            let mut caught_input = String::new();
-            println!("Did you catch it? (Y/N):");
-            read_in(&mut caught_input);
-
-            match caught_input.trim().parse() {
+            match caught.parse() {
                 Ok(Caught::Y) => catch(pokemon_box, species),
                 Ok(Caught::N) => println!("Better luck next time!"),
                 Err(err) => println!("Unrecognised statement: {err}"),
@@ -62,24 +55,20 @@ async fn encounter(client: &RustemonClient, pokemon_box: &mut HashMap<String, Po
         }
         Err(err) => println!(
             "Unable to fetch {} ({}): is the species name correct?",
-            species_input, err
+            species_name, err
         ),
     }
 }
 
 fn catch(pokemon_box: &mut HashMap<String, Pokemon>, species: Pokemon) {
-    let mut name_input = String::new();
-    println!("Enter a unique name for {}:", species.name);
-    read_in(&mut name_input);
-    pokemon_box.insert(name_input, species);
+    let name = read_in(&format!("Enter a unique name for {}:", species.name));
+    pokemon_box.insert(name, species);
 }
 
 fn withdraw(pokemon_box: &HashMap<String, Pokemon>) {
-    let mut name_input = String::new();
-    println!("Withdraw who?");
-    read_in(&mut name_input);
+    let name = read_in("Withdraw who?");
 
-    match pokemon_box.get(&name_input) {
+    match pokemon_box.get(&name) {
         Some(species) => print_species(species),
         None => println!("Not found"),
     }
@@ -91,6 +80,11 @@ fn print_species(species: &Pokemon) {
     }
 }
 
-fn read_in(buffer: &mut String) {
-    io::stdin().read_line(buffer).expect("Failed to read line");
+fn read_in(prompt: &str) -> String {
+    let mut buffer = String::new();
+    println!("{prompt}");
+    io::stdin()
+        .read_line(&mut buffer)
+        .expect("Failed to read line");
+    buffer.trim().to_owned()
 }
