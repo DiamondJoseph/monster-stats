@@ -28,11 +28,11 @@ async fn main() {
     let mut pokemon_box = HashMap::new();
 
     loop {
-        println!("Encounter, Withdraw or Exit?");
         let mut function_input = String::new();
+        println!("Encounter, Withdraw or Exit?");
         read_in(&mut function_input);
 
-        match function_input.parse() {
+        match function_input.trim().parse() {
             Ok(func) => match func {
                 Funcs::Encounter => encounter(&rustemon_client, &mut pokemon_box).await,
                 Funcs::Withdraw => withdraw(&pokemon_box),
@@ -46,8 +46,8 @@ async fn main() {
 }
 
 async fn encounter(client: &RustemonClient, pokemon_box: &mut HashMap<String, Pokemon>) {
-    println!("Enter a species name:");
     let mut species_input = String::new();
+    println!("Enter a species name:");
     read_in(&mut species_input);
 
     let result = rustemon::pokemon::pokemon::get_by_name(&species_input, client).await;
@@ -55,11 +55,11 @@ async fn encounter(client: &RustemonClient, pokemon_box: &mut HashMap<String, Po
         Ok(species) => {
             print_species(&species);
 
-            println!("Did you catch it? (Y/N):");
             let mut caught_input = String::new();
+            println!("Did you catch it? (Y/N):");
             read_in(&mut caught_input);
 
-            match caught_input.parse() {
+            match caught_input.trim().parse() {
                 Ok(caught) => {
                     match caught {
                         Caught::Y => catch(pokemon_box, species),
@@ -83,15 +83,15 @@ async fn encounter(client: &RustemonClient, pokemon_box: &mut HashMap<String, Po
 }
 
 fn catch(pokemon_box: &mut HashMap<String, Pokemon>, species: Pokemon) {
-    println!("Enter a unique name for {}:", species.name);
     let mut name_input = String::new();
+    println!("Enter a unique name for {}:", species.name);
     read_in(&mut name_input);
     pokemon_box.insert(name_input, species);
 }
 
 fn withdraw(pokemon_box: &HashMap<String, Pokemon>) {
-    println!("Withdraw who?");
     let mut name_input = String::new();
+    println!("Withdraw who?");
     read_in(&mut name_input);
 
     match pokemon_box.get(&name_input) {
