@@ -3,6 +3,7 @@ use std::io;
 
 use rustemon::client::RustemonClient;
 use rustemon::model::pokemon::Pokemon;
+use rustemon::pokemon::pokemon;
 use strum_macros::EnumString;
 
 #[derive(EnumString)]
@@ -22,8 +23,7 @@ enum Funcs {
 
 #[tokio::main]
 async fn main() {
-    let rustemon_client: rustemon::client::RustemonClient =
-        rustemon::client::RustemonClient::default();
+    let rustemon_client = RustemonClient::default();
     let mut pokemon_box = HashMap::new();
 
     loop {
@@ -41,7 +41,7 @@ async fn main() {
 async fn encounter(client: &RustemonClient, pokemon_box: &mut HashMap<String, Pokemon>) {
     let species_name = read_in("Enter a species name:");
 
-    let result = rustemon::pokemon::pokemon::get_by_name(&species_name, client).await;
+    let result = pokemon::get_by_name(&species_name, client).await;
     match result {
         Ok(species) => {
             print_species(&species);
