@@ -3,18 +3,17 @@ use std::io;
 
 use rustemon::client::RustemonClient;
 use rustemon::model::pokemon::Pokemon;
-
-extern crate strum;
-#[macro_use]
-extern crate strum_macros;
+use strum_macros::EnumString;
 
 #[derive(EnumString)]
+#[strum(ascii_case_insensitive)]
 enum Caught {
     Y,
     N,
 }
 
 #[derive(EnumString)]
+#[strum(ascii_case_insensitive)]
 enum Funcs {
     Encounter,
     Withdraw,
