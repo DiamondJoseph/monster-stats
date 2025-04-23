@@ -33,13 +33,9 @@ async fn main() {
         read_in(&mut function_input);
 
         match function_input.trim().parse() {
-            Ok(func) => match func {
-                Funcs::Encounter => encounter(&rustemon_client, &mut pokemon_box).await,
-                Funcs::Withdraw => withdraw(&pokemon_box),
-                Funcs::Exit => {
-                    break;
-                }
-            },
+            Ok(Funcs::Encounter) => encounter(&rustemon_client, &mut pokemon_box).await,
+            Ok(Funcs::Withdraw) => withdraw(&pokemon_box),
+            Ok(Funcs::Exit) => break,
             Err(err) => println!("Unrecognised command: {err}"),
         }
     }
@@ -60,18 +56,9 @@ async fn encounter(client: &RustemonClient, pokemon_box: &mut HashMap<String, Po
             read_in(&mut caught_input);
 
             match caught_input.trim().parse() {
-                Ok(caught) => {
-                    match caught {
-                        Caught::Y => catch(pokemon_box, species),
-                        Caught::N => {
-                            println!("Better luck next time!")
-                        }
-                    };
-                }
-                Err(err) => println!(
-                    "Unable to fetch {} ({}): is the species name correct?",
-                    species_input, err
-                ),
+                Ok(Caught::Y) => catch(pokemon_box, species),
+                Ok(Caught::N) => println!("Better luck next time!"),
+                Err(err) => println!("Unrecognised statement: {err}"),
             }
         }
         Err(err) => println!(
@@ -79,7 +66,6 @@ async fn encounter(client: &RustemonClient, pokemon_box: &mut HashMap<String, Po
             species_input, err
         ),
     }
-    println!()
 }
 
 fn catch(pokemon_box: &mut HashMap<String, Pokemon>, species: Pokemon) {
@@ -95,12 +81,8 @@ fn withdraw(pokemon_box: &HashMap<String, Pokemon>) {
     read_in(&mut name_input);
 
     match pokemon_box.get(&name_input) {
-        Some(species) => {
-            print_species(species);
-        }
-        None => {
-            println!("Not found");
-        }
+        Some(species) => print_species(species),
+        None => println!("Not found"),
     }
 }
 
