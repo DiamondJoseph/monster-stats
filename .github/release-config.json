@@ -7,7 +7,14 @@
     "rust": {
       "include-component-in-tag": false,
       "component": "container",
-      "release-type": "rust"
+      "release-type": "rust",
+      "extra-files": [
+        {
+          "type": "yaml",
+          "path": "/helm/Chart.yaml",
+          "jsonpath": "$.appVersion"
+        }
+      ]
     },
     "helm": {
       "component": "chart",
