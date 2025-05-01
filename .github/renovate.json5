@@ -2,6 +2,4 @@
     // JSON schema
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     reviewersFromCodeOwners: true,
-    onboarding: false,
-    requireConfig: "optional",
 }
